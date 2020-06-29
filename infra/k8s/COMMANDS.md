@@ -5,6 +5,16 @@
 $ k apply -f posts-srv.yaml
 ```
 
+## deploy latest image
+```
+$ k rollout restart deployment posts-depl
+```
+
+using glob
+```
+$ for f in `ls *.yaml`; do k rollout restart deployment ${f%.yaml}; done
+```
+
 ## create deployment
 ```
 $ k apply -f posts-srv.yaml

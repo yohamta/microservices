@@ -1,6 +1,9 @@
 # k8s config memo
 
 ## Pod
+- https://cloud.google.com/kubernetes-engine/docs/concepts/pod
+- The smallest, most basic deployable objects in Kubernetes
+
 ```yaml
 apiVersion: v1
 kind: Pod
@@ -14,6 +17,9 @@ spec:
 ```
 
 ## Deployment
+- https://cloud.google.com/kubernetes-engine/docs/concepts/deployment
+- Deployment (1) -> (*) Replicated Pods
+
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -69,7 +75,21 @@ metadata:
 spec:
   selector:
     app: event-bus
-  type: ClusterIP # This is default value of type
+  # type: ClusterIP # This is default value of type
+  ports:
+    - name: event-bus
+      protocol: TCP
+      port: 4005
+      targetPort: 4005
+
+```
+
+```
+$ k get services
+NAME            TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+event-bus-srv   ClusterIP   10.98.95.49     <none>        4005/TCP         9s
+kubernetes      ClusterIP   10.96.0.1       <none>        443/TCP          5d22h
+posts-srv       NodePort    10.109.111.44   <none>        4000:30000/TCP   41m
 ```
 
 ## Load Balancer
