@@ -34,8 +34,14 @@ spec:
           image: yohamta/posts
 ```
 
+## Cluster IP
+easy-to-remember URL
+
+## Load Balancer
+
+
 ## NodePort Service
-Host -> [nodePort] Master -> [port] Node Port  -> [targetPort] pod
+Host -> [nodePort] Node -> [port] Node Port  -> [targetPort] pod
 
 ```yaml
 apiVersion: v1
