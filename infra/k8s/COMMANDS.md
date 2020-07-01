@@ -15,6 +15,11 @@ using glob
 $ for f in `ls *.yaml`; do k rollout restart deployment ${f%.yaml}; done
 ```
 
+apply all config
+```
+$ k apply -f .
+```
+
 ## create deployment
 ```
 $ k apply -f posts-srv.yaml

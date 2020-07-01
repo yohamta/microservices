@@ -19,6 +19,7 @@ spec:
 ## Deployment
 - https://cloud.google.com/kubernetes-engine/docs/concepts/deployment
 - Deployment (1) -> (*) Replicated Pods
+- You can describe a desired state in a deployment
 
 ```yaml
 apiVersion: apps/v1
@@ -40,7 +41,13 @@ spec:
           image: yohamta/posts
 ```
 
-## Cluster IP
+## Service
+- Service is a abstrac way to expose an application running on a set of Pods as a network service
+- https://kubernetes.io/docs/concepts/services-networking/service/
+- define logical set of Pods
+  The set of pods targeted by Service is usually determined by a selector
+
+### Cluster IP Service
 - easy-to-remember URL
 - Needed for each Pod
 
@@ -92,8 +99,10 @@ kubernetes      ClusterIP   10.96.0.1       <none>        443/TCP          5d22h
 posts-srv       NodePort    10.109.111.44   <none>        4000:30000/TCP   41m
 ```
 
-## Load Balancer
-
+### Load Balancer Service
+- Load Balancer is a thing to Route/Foward requests to appropriate pods
+- Load Balancer Service tells the Cluster to reach out to its Provider(Cloud) and provision a LoadBalancer
+- Load Balancer Service -> Cluster -> Cloud Provider -> provision a Load Balancer
 
 ## NodePort Service
 - Host -> [nodePort] Node -> [port] Node Port  -> [targetPort] pod
@@ -113,4 +122,49 @@ spec:
     port: 4000
     targetPort: 4000
     nodePort: 30000
+```
+
+## Ingress / Ingress Controller
+- A pod with a set of routing rules to distribute to other services
+- Work along side with Load Balancer
+- Client -> Load Balancer -> Ingress Controller[Routing based on the path] -> Cluster IP -> Pods
+
+```
+$ k get pods --namespace ingress-nginx
+NAME                                        READY   STATUS      RESTARTS   AGE
+ingress-nginx-admission-create-75pwz        0/1     Completed   0          7m31s
+ingress-nginx-admission-patch-rrh9l         0/1     Completed   0          7m31s
+ingress-nginx-controller-579fddb54f-wj4w6   1/1     Running     0          7m41s
+
+$ k get service --namespace ingress-nginx
+NAME                                 TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)                      AGE
+ingress-nginx-controller             LoadBalancer   10.107.189.215   localhost     80:31808/TCP,443:30481/TCP   7m49s
+ingress-nginx-controller-admission   ClusterIP      10.98.197.241    <none>        443/TCP                      7m49s
+```
+
+### Routing rule for Ingress Controller
+
+ingress-srv.yaml
+```yaml
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-srv
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: posts.com
+      http:
+        paths:
+          - path: /posts
+            backend:
+              serviceName: posts-clusterip-srv
+              servicePort: 4000
+```
+
+```
+$ k get Ingress
+NAME          HOSTS       ADDRESS     PORTS   AGE
+ingress-srv   posts.com   localhost   80      10s
 ```
