@@ -190,7 +190,7 @@ kind: Config
 deploy:
   kubectl:
     manifests:
-      - ./infra/k8s/*
+      - ./infra/k8s/*.yaml
 build:
   local:
     push: false
