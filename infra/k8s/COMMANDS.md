@@ -56,3 +56,12 @@ v55
 Listening on 4000
 ```
 
+## delete all services, pods
+```
+$ k delete --all deployments,services
+```
+
+## start skaffold
+```
+$ skaffold dev
+```

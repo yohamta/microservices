@@ -181,3 +181,67 @@ $ k get Ingress
 NAME          HOSTS       ADDRESS     PORTS   AGE
 ingress-srv   posts.com   localhost   80      10s
 ```
+
+## skaffold
+
+```yaml
+apiVersion: skaffold/v2beta5
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/*
+build:
+  local:
+    push: false
+  artifacts:
+    - image: yohamta/client
+      context: client # client directory
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.js'
+            dest: .
+    - image: yohamta/comments
+      context: comments # directory
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.js'
+            dest: .
+    - image: yohamta/event-bus
+      context: event-bus # directory
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.js'
+            dest: .
+    - image: yohamta/moderation
+      context: moderation # directory
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.js'
+            dest: .
+    - image: yohamta/posts
+      context: posts # directory
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.js'
+            dest: .
+    - image: yohamta/query
+      context: query # directory
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.js'
+            dest: .
+
+```
