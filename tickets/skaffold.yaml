@@ -1,0 +1,18 @@
+apiVersion: skaffold/v2beta5
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/*.yaml
+build:
+  local:
+    push: false
+  artifacts:
+    - image: yohamta/auth
+      context: auth # directory
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.ts'
+            dest: .
