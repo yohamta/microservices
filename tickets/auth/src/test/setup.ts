@@ -2,8 +2,6 @@ import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 import { app } from "../app";
 
-console.log("setup test");
-
 let mongo: any;
 beforeAll(async () => {
   process.env.JWT_KEY = "asdfasdf";
