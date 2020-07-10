@@ -14,5 +14,13 @@ build:
         dockerfile: Dockerfile
       sync:
         manual:
-          - src: '*.ts'
+          - src: "src/**/*.ts"
+            dest: .
+    - image: yohamta/client
+      context: client # directory
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "**/*.js"
             dest: .
