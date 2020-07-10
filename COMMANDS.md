@@ -81,3 +81,56 @@ $ skaffold dev
 ```
 $ k create secret generic jwt-secret --from-literal=jwt=asdf
 ```
+
+## Namespaces
+
+```
+$ k get namespaces
+NAME              STATUS   AGE
+default           Active   16d
+docker            Active   16d
+ingress-nginx     Active   3h32m
+kube-node-lease   Active   16d
+kube-public       Active   16d
+kube-system       Active   16d
+
+$ k get services -n ingress-nginx
+NAME                                 TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)                      AGE
+ingress-nginx-controller             LoadBalancer   10.105.152.43    localhost     80:30786/TCP,443:31878/TCP   3h33m
+ingress-nginx-controller-admission   ClusterIP      10.107.106.224   <none>        443/TCP                      3h33m
+
+$ k describe service ingress-nginx-controller -n ingress-nginx
+Name:                     ingress-nginx-controller
+Namespace:                ingress-nginx
+Labels:                   app.kubernetes.io/component=controller
+                          app.kubernetes.io/instance=ingress-nginx
+                          app.kubernetes.io/managed-by=Helm
+                          app.kubernetes.io/name=ingress-nginx
+                          app.kubernetes.io/version=0.33.0
+                          helm.sh/chart=ingress-nginx-2.9.0
+                          skaffold.dev/builder=local
+                          skaffold.dev/cleanup=true
+                          skaffold.dev/deployer=kubectl
+                          skaffold.dev/docker-api-version=1.40
+                          skaffold.dev/run-id=ddd4bc25-8f19-4c7b-8c83-0856541f4b37
+                          skaffold.dev/tag-policy=git-commit
+                          skaffold.dev/tail=true
+Annotations:              kubectl.kubernetes.io/last-applied-configuration:
+                            {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app.kubernetes.io/component":"controller","app.kubernetes.io/i...
+Selector:                 app.kubernetes.io/component=controller,app.kubernetes.io/instance=ingress-nginx,app.kubernetes.io/name=ingress-nginx
+Type:                     LoadBalancer
+IP:                       10.105.152.43
+LoadBalancer Ingress:     localhost
+Port:                     http  80/TCP
+TargetPort:               http/TCP
+NodePort:                 http  30786/TCP
+Endpoints:                10.1.2.50:80
+Port:                     https  443/TCP
+TargetPort:               https/TCP
+NodePort:                 https  31878/TCP
+Endpoints:                10.1.2.50:443
+Session Affinity:         None
+External Traffic Policy:  Local
+HealthCheck NodePort:     32574
+Events:                   <none>
+```
