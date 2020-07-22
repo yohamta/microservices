@@ -134,3 +134,18 @@ External Traffic Policy:  Local
 HealthCheck NodePort:     32574
 Events:                   <none>
 ```
+
+## Port-forward to Pod
+
+```
+$ k get pods
+NAME                                  READY   STATUS    RESTARTS   AGE
+auth-depl-85b6bf566f-tntb5            1/1     Running   0          3m
+auth-mongo-depl-f5bdb6c75-tqvbp       1/1     Running   0          3m
+client-depl-66f8b8d7bb-7dp6z          1/1     Running   0          2m59s
+nats-depl-6f6948fbb9-7rdvn            1/1     Running   0          2m59s
+tickets-depl-5cbf5f7996-pvp24         1/1     Running   0          2m55s
+tickets-mongo-depl-76fd7bfdf7-wn55m   1/1     Running   0          2m54s
+
+$ k port-forward nats-depl-6f6948fbb9-7rdvn 4222:4222
+```

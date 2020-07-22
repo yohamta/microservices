@@ -15,17 +15,16 @@ spec:
       containers:
         - name: nats
           image: nats-streaming:0.17.0
-          args:
-            [
+          args: [
               "-p",
               "4222",
               "-m",
               "8222",
-              "-hbi",
+              "-hbi", # how often streaming server is going to make a heart beat request to each of clients
               "5s",
-              "-hbt",
+              "-hbt", # how long each client has to respond
               "5s",
-              "-hbf",
+              "-hbf", # number of times before the streaming server is going to assume that the connection is dead and gone
               "2",
               "-SD",
               "-cid",
