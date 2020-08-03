@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 interface TicketAttrs {
   title: string;
-  price: string;
+  price: number;
   userId: string;
 }
 
