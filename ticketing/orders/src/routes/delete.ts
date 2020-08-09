@@ -6,6 +6,8 @@ import {
   OrderStatus,
 } from "@yotahamada/common";
 import { Order } from "../models/order";
+import { OrderCancelledPublisher } from "../events/publishers/order-cancelled-publisher";
+import { natsWrapper } from "../nats-wrapper";
 
 const router = express.Router();
 
@@ -15,7 +17,7 @@ router.delete(
   async (req: Request, res: Response) => {
     const { orderId } = req.params;
 
-    const order = await Order.findById(orderId);
+    const order = await Order.findById(orderId).populate("ticket");
 
     if (!order) {
       throw new NotFoundError();
@@ -28,7 +30,14 @@ router.delete(
     order.status = OrderStatus.Cancelled;
     await order.save();
 
-    // TODO: Publishing an event saying this was cancelled
+    // Publishing an event saying this was cancelled
+    const publisher = new OrderCancelledPublisher(natsWrapper.client);
+    publisher.publish({
+      id: order.id,
+      ticket: {
+        id: order.ticket.id,
+      },
+    });
 
     // The 204 response must not include content
     res.status(204).send();

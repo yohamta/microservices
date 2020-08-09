@@ -83,13 +83,11 @@ it("create a ticket with valid inputs", async () => {
 });
 
 it("publishes an event", async () => {
-  const title = "asdfasd";
-
   await request(app)
     .post("/api/tickets")
     .set("Cookie", global.signup())
     .send({
-      title,
+      title: "dfsadf",
       price: 20,
     })
     .expect(201);
