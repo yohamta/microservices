@@ -37,6 +37,7 @@ router.delete(
       ticket: {
         id: order.ticket.id,
       },
+      version: order.version,
     });
 
     // The 204 response must not include content
