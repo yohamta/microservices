@@ -7,7 +7,9 @@ interface TicketAttrs {
   userId: string;
 }
 
-interface TicketDoc extends mongoose.Document, TicketAttrs {}
+interface TicketDoc extends mongoose.Document, TicketAttrs {
+  version: number;
+}
 
 interface TicketModel extends mongoose.Model<TicketDoc> {
   build(atrrs: TicketAttrs): TicketDoc;
@@ -42,6 +44,8 @@ ticketSchema.pre("save", async function (done) {
   done();
 });
 
+// change __v to version
+ticketSchema.set("versionKey", "version");
 ticketSchema.plugin(updateIfCurrentPlugin);
 
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
