@@ -2,11 +2,15 @@ import mongoose from "mongoose";
 import { Order, OrderStatus } from "./order";
 
 interface TicketAttrs {
+  id: string;
   title: string;
   price: number;
 }
 
-export interface TicketDoc extends mongoose.Document, TicketAttrs {
+export interface TicketDoc extends mongoose.Document {
+  id: string;
+  title: string;
+  price: number;
   isReserved(): Promise<boolean>;
 }
 
@@ -40,7 +44,12 @@ ticketSchema.pre("save", async function (done) {
 });
 
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
-  return new Ticket(attrs);
+  // Technical debt
+  return new Ticket({
+    _id: attrs.id,
+    title: attrs.title,
+    price: attrs.price,
+  });
 };
 ticketSchema.methods.isReserved = async function () {
   // the reason why we use 'function'
