@@ -1,11 +1,7 @@
 import { Message } from "node-nats-streaming";
 import mongoose from "mongoose";
 
-import {
-  TicketCreatedEvent,
-  OrderCreatedEvent,
-  OrderStatus,
-} from "@yotahamada/common";
+import { OrderCreatedEvent, OrderStatus } from "@yotahamada/common";
 import { natsWrapper } from "../../../nats-wrapper";
 import { Ticket } from "../../../models/ticket";
 import { OrderCreatedListener } from "../order-created-listeners";
