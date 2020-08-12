@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { Order, OrderStatus } from "./order";
-// import { updateIfCurrentPlugin } from "mongoose-update-if-current";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 interface TicketAttrs {
   id: string;
@@ -50,16 +50,16 @@ ticketSchema.pre("save", async function (done) {
 });
 
 ticketSchema.set("versionKey", "version");
-// ticketSchema.plugin(updateIfCurrentPlugin);
+ticketSchema.plugin(updateIfCurrentPlugin);
 
-ticketSchema.pre("save", function (done) {
-  // @ts-ignore
-  this.$where = {
-    version: this.get("version") - 1,
-  };
+// ticketSchema.pre("save", function (done) {
+//   // @ts-ignore
+//   this.$where = {
+//     version: this.get("version") - 1,
+//   };
 
-  done();
-});
+//   done();
+// });
 
 ticketSchema.statics.findByEvent = (event: { id: string; version: number }) => {
   return Ticket.findOne({

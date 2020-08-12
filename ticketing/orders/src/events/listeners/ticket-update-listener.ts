@@ -15,8 +15,13 @@ export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
     }
 
     // set the version the same value of the event
-    const { title, price, version } = data;
-    ticket.set({ title, price, version });
+    // const { title, price, version } = data;
+    // ticket.set({ title, price, version });
+
+    // rely on mongoose-update-if-current module
+    const { title, price } = data;
+    ticket.set({ title, price });
+
     await ticket.save();
 
     msg.ack();
