@@ -30,7 +30,7 @@ router.delete(
     order.status = OrderStatus.Cancelled;
     await order.save();
 
-    // Publishing an event saying this was cancelled
+    // Publishing an event saying this was cancelled!
     const publisher = new OrderCancelledPublisher(natsWrapper.client);
     publisher.publish({
       id: order.id,
