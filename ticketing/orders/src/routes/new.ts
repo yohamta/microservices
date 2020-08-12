@@ -56,6 +56,7 @@ router.post(
     const publisher = new OrderCreatedPublisher(natsWrapper.client);
     publisher.publish({
       id: order.id,
+      version: order.version,
       status: order.status,
       userId: req.currentUser!.id,
       expiresAt: order.expireAt.toISOString(), // UTC time
@@ -63,7 +64,6 @@ router.post(
         id: ticket.id,
         price: ticket.price,
       },
-      version: order.version,
     });
 
     res.status(201).send(order);
