@@ -1,12 +1,7 @@
-import { TicketCreatedListener } from "../ticket-created-listener";
 import { Message } from "node-nats-streaming";
 import mongoose from "mongoose";
 import { natsWrapper } from "../../../nats-wrapper";
-import {
-  TicketCreatedEvent,
-  OrderStatus,
-  ExpirationCompleteEvent,
-} from "@yotahamada/common";
+import { OrderStatus, ExpirationCompleteEvent } from "@yotahamada/common";
 import { Ticket } from "../../../models/ticket";
 import { Order } from "../../../models/order";
 import { ExpirationCompleteListener } from "../expiration-complete-listener";
