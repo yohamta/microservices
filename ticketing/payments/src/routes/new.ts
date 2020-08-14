@@ -10,6 +10,7 @@ import {
 } from "@yotahamada/common";
 import { Order } from "../models/order";
 import { stripe } from "../stripe";
+import { Payment } from "../models/payment";
 
 const router = express.Router();
 
@@ -36,16 +37,22 @@ router.post(
     }
 
     try {
-      await stripe.charges.create({
+      const charge = await stripe.charges.create({
         amount: order.price,
         currency: "jpy",
         source: token,
       });
+
+      const payment = Payment.build({
+        orderId: order.id,
+        stripeId: charge.id,
+      });
+      await payment.save();
     } catch (err) {
       throw err;
     }
 
-    res.status(204).send({ success: true });
+    res.status(201).send({ success: true });
   }
 );
 

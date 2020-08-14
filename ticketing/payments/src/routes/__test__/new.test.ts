@@ -3,6 +3,7 @@ import { app } from "../../app";
 import mongoose from "mongoose";
 import { Order, OrderStatus } from "../../models/order";
 import { stripe } from "../../stripe";
+import { Payment } from "../../models/payment";
 
 // jest.mock("../../stripe");
 
@@ -59,7 +60,7 @@ it("return a 400 when purchasing a cancelled order", async () => {
     .expect(400);
 });
 
-it("returns a 204 with valid inputs", async () => {
+it("returns a 201 with valid inputs", async () => {
   const userId = mongoose.Types.ObjectId().toHexString();
   const amount = Math.floor(Math.random() * 10000);
 
@@ -79,15 +80,20 @@ it("returns a 204 with valid inputs", async () => {
       token: "tok_visa",
       orderId: order.id,
     })
-    .expect(204);
+    .expect(201);
 
-  const stripeCharges = await stripe.charges.list({ limit: 50 });
+  const stripeCharges = await stripe.charges.list({ limit: 20 });
   const stripeCharge = stripeCharges.data.find(
     (charge) => charge.amount === amount
   );
-
   expect(stripeCharge).toBeDefined();
-  expect(stripeCharge!.currency).toEqual('jpy');
+  expect(stripeCharge!.currency).toEqual("jpy");
+
+  const payment = await Payment.findOne({
+    orderId: order.id,
+    stripeId: stripeCharge!.id,
+  });
+  expect(payment).not.toBeNull();
 
   // const chargeOptions = (stripe.charges.create as jest.Mock).mock.calls[0][0];
   // expect(chargeOptions.source).toEqual("tok_visa");
