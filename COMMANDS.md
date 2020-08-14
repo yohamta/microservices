@@ -82,6 +82,12 @@ $ skaffold dev
 $ k create secret generic jwt-secret --from-literal=jwt=asdf
 ```
 
+Another example
+```
+$ k create secret generic stripe-secret --from-literal STRIPE_KEY=sk_test_dsfalkejfklasjef
+secret/stripe-secret created
+```
+
 ## Namespaces
 
 ```
