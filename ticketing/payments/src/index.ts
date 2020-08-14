@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import { app } from "./app";
 import { natsWrapper } from "./nats-wrapper";
+import { OrderCreatedListener } from "./events/listeners/order-created-listeners";
+import { OrderCancelledListener } from "./events/listeners/order-cancelled-listeners";
 
 const start = async () => {
   if (!process.env.JWT_KEY) {
@@ -37,6 +39,9 @@ const start = async () => {
       useCreateIndex: true,
     });
     console.log("Connected to MongoDB");
+
+    new OrderCreatedListener(natsWrapper.client).listen();
+    new OrderCancelledListener(natsWrapper.client).listen();
   } catch (err) {
     console.error(err);
   }
