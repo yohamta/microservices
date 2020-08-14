@@ -45,7 +45,7 @@ router.post(
       throw err;
     }
 
-    res.send({ success: true });
+    res.status(204).send({ success: true });
   }
 );
 
