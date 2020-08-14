@@ -4,6 +4,7 @@ import { json } from "body-parser";
 import cookieSession from "cookie-session";
 
 import { errorHandler, NotFoundError, currentUser } from "@yotahamada/common";
+import { CreateChargeRouter } from "./routes/new";
 
 const app = express();
 app.set("trust proxy", true);
@@ -15,6 +16,7 @@ app.use(
   })
 );
 app.use(currentUser);
+app.use(CreateChargeRouter);
 
 app.get("*", async (_req, _res) => {
   throw new NotFoundError();
