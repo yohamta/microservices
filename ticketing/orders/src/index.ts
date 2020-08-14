@@ -34,16 +34,16 @@ const start = async () => {
     process.on("SIGINT", () => natsWrapper.client.close()); // interrupt
     process.on("SIGTERM", () => natsWrapper.client.close()); // terminate
 
-    new TicketCreatedListener(natsWrapper.client).listen();
-    new TicketUpdatedListener(natsWrapper.client).listen();
-    new ExpirationCompleteListener(natsWrapper.client).listen();
-
     await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
     });
     console.log("Connected to MongoDB");
+
+    new TicketCreatedListener(natsWrapper.client).listen();
+    new TicketUpdatedListener(natsWrapper.client).listen();
+    new ExpirationCompleteListener(natsWrapper.client).listen();
   } catch (err) {
     console.error(err);
   }
