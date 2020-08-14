@@ -9,6 +9,7 @@ import {
   OrderStatus,
 } from "@yotahamada/common";
 import { Order } from "../models/order";
+import { stripe } from "../stripe";
 
 const router = express.Router();
 
@@ -32,6 +33,16 @@ router.post(
 
     if (order.status === OrderStatus.Cancelled) {
       throw new BadRequestError("Cannot pay for an cancelled order");
+    }
+
+    try {
+      await stripe.charges.create({
+        amount: order.price,
+        currency: "jpy",
+        source: token,
+      });
+    } catch (err) {
+      throw err;
     }
 
     res.send({ success: true });
