@@ -1,8 +1,12 @@
 import { Message } from "node-nats-streaming";
-import { Subjects, Listener, OrderCancelledEvent } from "@yotahamada/common";
+import {
+  Subjects,
+  Listener,
+  OrderCancelledEvent,
+  OrderStatus,
+} from "@yotahamada/common";
 import { queueGroupName } from "./queue-group-name";
-import { Ticket } from "../../models/ticket";
-import { TicketUpdatedPublisher } from "../publishers/ticket-updated-publisher";
+import { Order } from "../../models/order";
 
 export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
   subject: Subjects.OrderCancelled = Subjects.OrderCancelled;
@@ -10,26 +14,19 @@ export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
 
   async onMessage(data: OrderCancelledEvent["data"], msg: Message) {
     // Find the ticket that the order is reserving
-    const ticket = await Ticket.findById(data.ticket.id);
+    const order = await Order.findOne({
+      _id: data.id,
+      version: data.version - 1,
+    });
 
     // If no ticket, throw error
-    if (!ticket) {
-      throw new Error("Ticket not found");
+    if (!order) {
+      throw new Error("Order not found");
     }
 
     // Mark the ticket as being reserved by setting its orderId property
-    ticket.set({ orderId: undefined });
-
-    // Save the ticket
-    await ticket.save();
-    await new TicketUpdatedPublisher(this.client).publish({
-      id: ticket.id,
-      version: ticket.version,
-      title: ticket.title,
-      price: ticket.price,
-      orderId: ticket.orderId,
-      userId: ticket.userId,
-    });
+    order.set({ status: OrderStatus.Cancelled });
+    await order.save();
 
     // ack the message
     msg.ack();
