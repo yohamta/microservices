@@ -86,6 +86,12 @@ Another example
 ```
 $ k create secret generic stripe-secret --from-literal STRIPE_KEY=sk_test_dsfalkejfklasjef
 secret/stripe-secret created
+
+$ k get secrets
+NAME                  TYPE                                  DATA   AGE
+default-token-vmz52   kubernetes.io/service-account-token   3      31d
+jwt-secret            Opaque                                1      31d
+stripe-secret         Opaque                                1      67s
 ```
 
 ## Namespaces
