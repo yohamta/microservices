@@ -10,7 +10,7 @@ export default ({ url, method, body, onSuccess }) => {
       setErrors([]);
       const response = await axios[method](url, body);
       if (onSuccess) {
-        onSuccess();
+        onSuccess(response.data);
       }
       return response.data;
     } catch (err) {
