@@ -1,6 +1,4 @@
-import buildClient from "../api/build-client";
-
-const LP = ({ currentUser }) => {
+const LandingPage = ({ currentUser }) => {
   return currentUser ? (
     <h1>You are signed in</h1>
   ) : (
@@ -8,9 +6,8 @@ const LP = ({ currentUser }) => {
   );
 };
 
-LP.getInitialProps = async ({ req }) => {
-  const { data } = await buildClient({ req }).get("/api/users/currentuser");
-  return data;
+LandingPage.getInitialProps = async (context, client, currentUser) => {
+  return {};
 };
 
-export default LP;
+export default LandingPage;
