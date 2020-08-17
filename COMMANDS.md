@@ -193,3 +193,36 @@ tickets-mongo-depl-76fd7bfdf7-wn55m   1/1     Running   0          2m54s
 
 $ k port-forward nats-depl-6f6948fbb9-7rdvn 4222:4222
 ```
+
+
+## context
+
+```
+$ k config view
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: DATA+OMITTED
+    server: https://kubernetes.docker.internal:6443
+  name: docker-desktop
+contexts:
+- context:
+    cluster: docker-desktop
+    user: docker-desktop
+  name: docker-desktop
+- context:
+    cluster: docker-desktop
+    user: docker-desktop
+  name: docker-for-desktop
+current-context: docker-desktop
+kind: Config
+preferences: {}
+users:
+- name: docker-desktop
+  user:
+    client-certificate-data: REDACTED
+    client-key-data: REDACTED
+
+# Connecting to a context
+$ k config use-context docker-desktop
+```
